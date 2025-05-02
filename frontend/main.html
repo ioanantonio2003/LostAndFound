@@ -2,23 +2,67 @@
 <html lang="ro">
 <head>
   <meta charset="UTF-8">
-  <title>Main Page</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lost & Found - Pagina Principală</title>
+  <link rel="stylesheet" href="main.css">
 </head>
 <body>
-  <h1>Hello, <span id="username"></span>!</h1>
-  <p>You are now logged in.</p>
-  
-  <a href="/logout">Logout</a>
+  <header>
+    <nav class="navbar">
+      <div class="logo">🔍Lost & Found🔍</div>
+      <ul class="nav-links">
+        <li><a href="#">Report</a></li>
+        <li><a href="#">Browse</a></li>
+        <li><a href="#">My Items</a></li>
+        <li><span id="username"></span></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </nav>
+    <h1 class="motto"><u><i>🔍Find what you have lost. It was never that easy🔍</i></u></h1>
+  </header>
 
-  <!-- we take the username from server.js-->
+  <main class="card-container">
+    <div class="card">
+      <img src="report.png" alt="Report">
+      <h2>Find a lost item</h2>
+      <p>Sometimes we don't pay attention to our things and we can easily forget about them. We think about many things,
+         we are not focused and we lose sight of our possessions. But with a society that can move in a good direction,
+         there is a solution to finding the lost things. With a simple search you can see if your lost object is found by
+          someone or make an report for others to see the lost object you are looking to find .</p>
+    </div>
+  
+    <div class="card">
+      <img src="browse.png" alt="Browse">
+      <h2>Report a found item</h2>
+      <p>Also, not everyone pays attention and often forgets about valuables. We can become a better, stronger,
+         and closer society to goodness through our decisions. If we find objects that do not belong to us,
+          we are one click away from being able to make someone happy, to be able to return something
+         to a person who has not been careful. Maximum a few minutes and you can publish the found object in our application.</p>
+    </div>
+  
+    <div class="card">
+      <img src="socialize.png" alt="My Items">
+      <h2>Your items</h2>
+      <p>Keep track of the status of your items. You can check both your ads about found items and your ads about your lost items.
+         Our app is fast and easy to use. In a maximum of a few minutes you can get in touch with people who have published
+          the ad or who have found your objects. Also, apart from email contact,
+         you can also leave a contact number so that you can also be called by phone.This is very easy and very helpful. Join
+         now our community. <p>
+    </div>
+  </main>
+  
+
+  <footer>
+    <p>&copy; 2025 Lost & Found | Contact: lostandfound@unibuc.ro | Instagram: @lostfoundromania</p>
+  </footer>
+
   <script>
     fetch('/get-user')
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
-        document.getElementById('username').textContent = data.username;
+        document.getElementById('username').textContent = `Salut, ${data.username}`;
       })
-      .catch(error => console.error('Error:', error));
+      .catch(err => console.error('Eroare:', err));
   </script>
 </body>
 </html>
