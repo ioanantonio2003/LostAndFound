@@ -1,0 +1,17 @@
+[
+  {
+    "username": "exampleUser",
+    "email": "user@example.com",
+    "password": "hashedPassword"
+  },
+  {
+    "username": "test1",
+    "email": "test1@gmail.com",
+    "password": "test1"
+  },
+  {
+    "username": "test2",
+    "email": "test2@gmail.com",
+    "password": "test2"
+  }
+]
