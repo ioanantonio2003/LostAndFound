@@ -92,6 +92,72 @@
             </div>
         </div>
     </div>
+    <div id="found-tab" class="tab-content">
+        <div class="card-container">
+            <div class="card">
+                <h2>Report a Found Item</h2>
+                <p>If you find objects that do not belong to you, you can make someone happy by returning them. It only
+                    takes a few minutes to publish the found object in our application.</p>
+
+                <form id="foundForm">
+                    <div class="form-group">
+                        <label for="found-item-name">Item Name</label>
+                        <input type="text" id="found-item-name" placeholder="e.g., Black Backpack, Gold Ring, Glasses"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-category">Category</label>
+                        <select id="found-category" required>
+                            <option value="">Select a category</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Wallet/Purse">Wallet/Purse</option>
+                            <option value="Keys">Keys</option>
+                            <option value="Jewelry">Jewelry</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Documents">Documents</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-location">Where did you find it?</label>
+                        <input type="text" id="found-location" placeholder="e.g., Park Bench, Bus Station, Coffee Shop"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-date">When did you find it?</label>
+                        <input type="date" id="found-date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-description">Description</label>
+                        <textarea id="found-description"
+                            placeholder="Provide details about the item (condition, where exactly you found it)"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Upload Photo (Recommended)</label>
+                        <div class="photo-upload" onclick="document.getElementById('found-photo').click()">
+                            <p>Click to upload photo</p>
+                            <input type="file" id="found-photo" accept="image/*" style="display: none;"
+                                onchange="previewImage(this, 'found-preview')">
+                            <img id="found-preview" class="preview-image">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="found-contact">Contact Information</label>
+                        <input type="text" id="found-contact" placeholder="Email" required>
+                    </div>
+
+                    <button type="submit" class="btn">Submit Report</button>
+                    <button type="reset" class="btn btn-secondary">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
         
     <footer>
         <p>2025 Lost & Found | Contact: botanoffound@unitsurco | Instagram: @sessionsdromana</p>
@@ -134,7 +200,10 @@
             saveItem('lost');
         });
         //tapylyngosmalysuyere
-        
+        document.getElementById('foundForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            saveItem('found');
+        });
 
         // Save item to localStorage and redirect to browse page
         function saveItem(type) {
