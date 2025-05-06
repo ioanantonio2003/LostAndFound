@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Items | Lost & Found</title>
+    <link rel="stylesheet" href="browse.css">
+</head>
+<body>
+    <header>
+        <h1></h1>
+        <header>
+            <nav class="navbar">
+              <div class="logo">🔍Browse Lost & Found Items🔍</div>
+              <ul class="nav-links">
+                <li><a href="/main.html">Main</a></li>
+                <li><a href="/report.html">Report</a></li>
+                <li><a href="#">My Items</a></li>
+                <li><span id="username"></span></li>
+                <li><a href="/logout">Logout</a></li>
+              </ul>
+            </nav>
+            <h1 class="motto"><u><i>🔍Check if your lost item has been found or help return found items to their owners🔍</i></u></h1>
+          </header>
+        <p></p>
+    </header>
+    
+    <div class="filter-bar">
+        <div class="filter-group">
+            <label for="filter-type">Item Type</label>
+            <select id="filter-type">
+                <option value="all">All Items</option>
+                <option value="lost">Lost Items</option>
+                <option value="found">Found Items</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="filter-category">Category</label>
+            <select id="filter-category">
+                <option value="all">All Categories</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Wallet/Purse">Wallet/Purse</option>
+                <option value="Keys">Keys</option>
+                <option value="Jewelry">Jewelry</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Documents">Documents</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="filter-location">Location</label>
+            <input type="text" id="filter-location" placeholder="Search by location">
+        </div>
+        
+        <div class="filter-group">
+            <label for="filter-date">Date Range</label>
+            <select id="filter-date">
+                <option value="all">All Dates</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="items-grid" id="items-container">
+        <!-- Items will be loaded here by JavaScript -->
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 Lost & Found | Contact: lostandfound@unibuc.ro | Instagram: @lostfoundromania</p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load items from localStorage
+            const items = JSON.parse(localStorage.getItem('lostAndFoundItems')) || [];
+            
+            // Display items
+            displayItems(items);
+            
+            // Set up filter event listeners
+            document.getElementById('filter-type').addEventListener('change', applyFilters);
+            document.getElementById('filter-category').addEventListener('change', applyFilters);
+            document.getElementById('filter-location').addEventListener('input', applyFilters);
+            document.getElementById('filter-date').addEventListener('change', applyFilters);
+            
+            function applyFilters() {
+                const typeFilter = document.getElementById('filter-type').value;
+                const categoryFilter = document.getElementById('filter-category').value;
+                const locationFilter = document.getElementById('filter-location').value.toLowerCase();
+                const dateFilter = document.getElementById('filter-date').value;
+                
+                const allItems = JSON.parse(localStorage.getItem('lostAndFoundItems')) || [];
+                const filteredItems = allItems.filter(item => {
+                    // Type filter
+                    if (typeFilter !== 'all' && item.type !== typeFilter) return false;
+                    
+                    // Category filter
+                    if (categoryFilter !== 'all' && item.category !== categoryFilter) return false;
+                    
+                    // Location filter
+                    if (locationFilter && !item.location.toLowerCase().includes(locationFilter)) return false;
+                    
+                    // Date filter
+                    if (dateFilter !== 'all') {
+                        const itemDate = new Date(item.date);
+                        const today = new Date();
+                        
+                        switch (dateFilter) {
+                            case 'today':
+                                return itemDate.toDateString() === today.toDateString();
+                            case 'week':
+                                const oneWeekAgo = new Date();
+                                oneWeekAgo.setDate(today.getDate() - 7);
+                                return itemDate >= oneWeekAgo;
+                            case 'month':
+                                const oneMonthAgo = new Date();
+                                oneMonthAgo.setMonth(today.getMonth() - 1);
+                                return itemDate >= oneMonthAgo;
+                        }
+                    }
+                    
+                    return true;
+                });
+                
+                displayItems(filteredItems);
+            }
+            
+            function displayItems(itemsToDisplay) {
+                const container = document.getElementById('items-container');
+                container.innerHTML = '';
+                
+                if (itemsToDisplay.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-items">
+                            <p>No items match your search criteria.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                itemsToDisplay.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'item-card';
+                    
+                    // Create image container
+                    let imageContainer;
+                    if (item.photo) {
+                        imageContainer = document.createElement('img');
+                        imageContainer.src = item.photo;
+                        imageContainer.className = 'item-image';
+                        imageContainer.alt = item.name;
+                    } else {
+                        imageContainer = document.createElement('div');
+                        imageContainer.className = 'item-image default-image';
+                        imageContainer.textContent = 'No Image Available';
+                    }
+                    
+                    // Create details section
+                    const details = document.createElement('div');
+                    details.className = 'item-details';
+                    details.innerHTML = `
+                        <span class="item-type type-${item.type}">
+                            ${item.type === 'lost' ? 'LOST' : 'FOUND'}
+                        </span>
+                        <h3 class="item-title">${item.name}</h3>
+                        <div class="item-category">${item.category}</div>
+                        <div class="item-location">📍 ${item.location}</div>
+                        <div class="item-date">📅 ${new Date(item.date).toLocaleDateString()}</div>
+                        <p class="item-description">
+                            ${item.description || 'No additional description provided.'}
+                        </p>
+                        <div class="item-contact">
+                            <strong>Contact:</strong> ${item.contact}
+                            <a href="mailto:${item.contact}" class="contact-btn">Contact Owner</a>
+                        </div>
+                    `;
+                    
+                    // Append elements to card
+                    card.appendChild(imageContainer);
+                    card.appendChild(details);
+                    container.appendChild(card);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
