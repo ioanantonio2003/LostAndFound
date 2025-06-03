@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Item Details | Lost & Found</title>
+  <link rel="stylesheet" href="details.css">
+</head>
+<body>
+  <h1>Item Details</h1>
+  <div id="item-details"></div>
+
+  <button class="contact-btn">Contact Owner</button>
+
+  <div id="contact-form" style="display:none; margin-top: 20px;">
+    <h3>Send a Message to the Owner</h3>
+    <label>Your Message:
+      <textarea id="message-content" rows="4" style="width:100%;"></textarea>
+    </label>
+    <button id="send-message-btn" class="contact-btn" style="background-color: #28a745;">Send Message</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const item = JSON.parse(localStorage.getItem('selectedItem'));
+      if (!item) {
+        alert('No item selected.');
+        window.location.href = 'browse.html'; 
+        return;
+      }
+
+      const container = document.getElementById('item-details');
+
+      const img = document.createElement('img');
+      img.src = item.photo || '';
+      img.alt = item.name || 'Item photo';
+      container.appendChild(img);
+
+      const title = document.createElement('h2');
+      title.textContent = item.name || 'Unnamed Item';
+      container.appendChild(title);
+
+      const category = document.createElement('p');
+      category.textContent = `Category: ${item.category}`;
+      container.appendChild(category);
+
+      const location = document.createElement('p');
+      location.textContent = `Location: ${item.location}`;
+      container.appendChild(location);
+
+      const date = document.createElement('p');
+      date.textContent = `Date: ${new Date(item.date).toLocaleDateString()}`;
+      container.appendChild(date);
+
+      const description = document.createElement('p');
+      description.textContent = item.description || 'No description provided.';
+      container.appendChild(description);
+
+      const contact = document.createElement('p');
+      contact.innerHTML = `<strong>Contact:</strong> ${item.contact}`;
+      container.appendChild(contact);
+
+      // show form when contact owner clicked
+      document.querySelector('.contact-btn').addEventListener('click', () => {
+        document.getElementById('contact-form').style.display = 'block';
+      });
+
+      // send message button
+      document.getElementById('send-message-btn').addEventListener('click', () => {
+        const message = document.getElementById('message-content').value.trim();
+        if (!message) {
+          alert('Please write a message.');
+          return;
+        }
+
+        fetch('/get-user')
+          .then(res => res.json())
+          .then(data => {
+            const currentUser = data.username;
+
+            alert(`📧 Email sent to ${item.contact}!\n\nFrom: ${currentUser}\nMessage: ${message}`);
+            document.getElementById('contact-form').style.display = 'none';
+            document.getElementById('message-content').value = '';
+          })
+          .catch(() => {
+            alert('Could not get current user info.');
+          });
+      });
+    });
+  </script>
+</body>
+</html>

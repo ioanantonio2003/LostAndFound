@@ -162,91 +162,93 @@
     <footer>
         <p>2025 Lost & Found | Contact: botanoffound@unitsurco | Instagram: @sessionsdromana</p>
     </footer>
-
+<body>
     <script>
-        // Switch between lost and found tabss
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
+    function switchTab(tabName) {
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
 
-            document.getElementById(`${tabName}-tab`).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
 
-        // Preview uploaded image
-        function previewImage(input, previewId) {
-            const preview = document.getElementById(previewId);
-            const file = input.files[0];
+    // Preview uploaded image
+    function previewImage(input, previewId) {
+        const preview = document.getElementById(previewId);
+        const file = input.files[0];
 
-            if (file) {
-                const reader = new FileReader();
+        if (file) {
+            const reader = new FileReader();
 
-                reader.onload = function (e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-
-                reader.readAsDataURL(file);
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
             }
+
+            reader.readAsDataURL(file);
         }
+    }
 
-        // Handle form submissions
-        document.getElementById('lostForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            saveItem('lost');
-        });
-        //tapylyngosmalysuyere
-        document.getElementById('foundForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            saveItem('found');
-        });
+    // Handle form submissions
+    document.getElementById('lostForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        saveItem('lost');
+    });
 
-        // Save item to localStorage and redirect to browse page
-        function saveItem(type) {
-            const formData = {
-                type: type,
-                name: document.getElementById(`${type}-item-name`).value,
-                category: document.getElementById(`${type}-category`).value,
-                location: document.getElementById(`${type}-location`).value,
-                date: document.getElementById(`${type}-date`).value,
-                description: document.getElementById(`${type}-description`).value,
-                contact: document.getElementById(`${type}-contact`).value,
-                timestamp: new Date().toISOString()
-                
-            };
+    document.getElementById('foundForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        saveItem('found');
+    });
 
-            // Handle photo upload
-            const photoInput = document.getElementById(`${type}-photo`);
-            if (photoInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    formData.photo = e.target.result;
-                    storeItem(formData);
-                };
-                reader.readAsDataURL(photoInput.files[0]);
-            } else {
+    // Save item to localStorage and redirect to browse page
+    function saveItem(type) {
+        const formData = {
+            type: type,
+            name: document.getElementById(`${type}-item-name`).value,
+            category: document.getElementById(`${type}-category`).value,
+            location: document.getElementById(`${type}-location`).value,
+            date: document.getElementById(`${type}-date`).value,
+            description: document.getElementById(`${type}-description`).value,
+            contact: document.getElementById(`${type}-contact`).value,
+            timestamp: new Date().toISOString()
+        };
+
+        const photoInput = document.getElementById(`${type}-photo`);
+        if (photoInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                formData.photo = e.target.result;
                 storeItem(formData);
-            }
+            };
+            reader.readAsDataURL(photoInput.files[0]);
+        } else {
+            storeItem(formData);
         }
+    }
 
-        function storeItem(item) {
-            // Get existing items or initialize empty array
-            const items = JSON.parse(localStorage.getItem('lostAndFoundItems')) || [];
+    function storeItem(item) {
+        fetch("/get-user")
+            .then(res => res.json())
+            .then(data => {
+                item.reportedBy = data.username;
 
-            // Add new item
-            items.push(item);
+                const items = JSON.parse(localStorage.getItem('lostAndFoundItems')) || [];
+                items.push(item);
+                localStorage.setItem('lostAndFoundItems', JSON.stringify(items));
 
-            // Save back to localStorage
-            localStorage.setItem('lostAndFoundItems', JSON.stringify(items));
+                window.location.href = 'browse.html';
+            })
+            .catch(error => {
+                alert("Error: current user could not be retrieved.");
+                console.error(error);
+            });
+    }
+</script>
 
-            // Redirect to browse page
-            window.location.href = 'browse.html';
-        }
-    </script>
 </body>
 
 </html>

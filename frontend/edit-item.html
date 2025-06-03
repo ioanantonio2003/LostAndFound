@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Item | Lost & Found</title>
+  <link rel="stylesheet" href="edit-item.css">
+</head>
+<body>
+  <h1>Edit Your Item</h1>
+  <form id="edit-form">
+    <label>
+      Name:
+      <input type="text" id="edit-name" required>
+    </label>
+    <label>
+      Description:
+      <textarea id="edit-description"></textarea>
+    </label>
+    <label>
+      Location:
+      <input type="text" id="edit-location" required>
+    </label>
+    <label>
+      Category:
+      <select id="edit-category" required>
+        <option value="Electronics">Electronics</option>
+        <option value="Wallet/Purse">Wallet/Purse</option>
+        <option value="Keys">Keys</option>
+        <option value="Jewelry">Jewelry</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Documents">Documents</option>
+        <option value="Other">Other</option>
+      </select>
+    </label>
+    <button type="submit">Save Changes</button>
+  </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const item = JSON.parse(localStorage.getItem('itemToEdit'));
+      if (!item) {
+        alert('No item selected for editing.');
+        window.location.href = 'myitems.html';
+        return;
+      }
+
+      // populate
+      document.getElementById('edit-name').value = item.name;
+      document.getElementById('edit-description').value = item.description || '';
+      document.getElementById('edit-location').value = item.location;
+      document.getElementById('edit-category').value = item.category;
+
+      document.getElementById('edit-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // update the fields
+        const updatedItem = {
+          ...item,
+          name: document.getElementById('edit-name').value,
+          description: document.getElementById('edit-description').value,
+          location: document.getElementById('edit-location').value,
+          category: document.getElementById('edit-category').value
+        };
+
+        // replace item in localStorage
+        const allItems = JSON.parse(localStorage.getItem('lostAndFoundItems')) || [];
+        const newItems = allItems.map(i => i.timestamp === item.timestamp ? updatedItem : i);
+        localStorage.setItem('lostAndFoundItems', JSON.stringify(newItems));
+
+        // clean and redirect
+        localStorage.removeItem('itemToEdit');
+        alert('Item updated successfully!');
+        window.location.href = 'myitems.html';
+      });
+    });
+  </script>
+</body>
+</html>
+

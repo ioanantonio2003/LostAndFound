@@ -13,7 +13,7 @@
             <ul class="nav-links">
                 <li><a href="/main.html">Main</a></li>
                 <li><a href="/report.html">Report</a></li>
-                <li><a href="#">My Items</a></li>
+                <li><a href="/myitems.html">My Items</a></li>
                 <li><span id="username"></span></li>
                 <li><a href="/logout">Logout</a></li>
             </ul>
@@ -182,6 +182,12 @@
                     card.appendChild(imageContainer);
                     card.appendChild(details);
                     container.appendChild(card);
+                    card.addEventListener('click', (e) => {
+                        if(e.target.classList.contains('contact-btn')) return;
+
+                        localStorage.setItem('selectedItem', JSON.stringify(item));
+                        window.location.href = 'details.html';
+                    });
                 });
             }
         });

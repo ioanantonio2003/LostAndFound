@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Items | Lost & Found</title>
+    <link rel="stylesheet" href="browse.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">🔍My Lost & Found Items🔍</div>
+            <ul class="nav-links">
+                <li><a href="/main.html">Main</a></li>
+                <li><a href="/report.html">Report</a></li>
+                <li><a href="/myitems.html" class="active">My Items</a></li>
+                <li><span id="username"></span></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="header-content">
+            <h1 class="motto">Items You Have Reported</h1>
+        </div>
+    </header>
+
+    <div id="items-container" class="items-grid">
+        
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Lost & Found | Contact: lostandfound@unibuc.ro | Instagram: @lostfoundromania</p>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/get-user')
+            .then(res => res.json())
+            .then(data => {
+                const username = data.username;
+                document.getElementById('username').textContent = username;
+
+                const allItems = JSON.parse(localStorage.getItem('lostAndFoundItems')) || [];
+                const myItems = allItems.filter(item => item.reportedBy === username);
+
+                displayItems(myItems);
+            })
+            .catch(() => {
+                alert('Error: could not get current user.');
+            });
+
+        function displayItems(items) {
+            const container = document.getElementById('items-container');
+            container.innerHTML = '';
+
+            if (items.length === 0) {
+                container.innerHTML = '<p>No items reported by you yet.</p>';
+                return;
+            }
+
+            items.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+
+                let imageElement;
+                if (item.photo) {
+                    imageElement = document.createElement('img');
+                    imageElement.src = item.photo;
+                    imageElement.alt = item.name;
+                    imageElement.className = 'item-image';
+                } else {
+                    imageElement = document.createElement('div');
+                    imageElement.className = 'item-image default-image';
+                    imageElement.textContent = 'No Image Available';
+                }
+
+                const details = document.createElement('div');
+                details.className = 'item-details';
+                details.innerHTML = `
+                    <span class="item-type type-${item.type}">${item.type.toUpperCase()}</span>
+                    <h3 class="item-title">${item.name}</h3>
+                    <div class="item-category">${item.category}</div>
+                    <div class="item-location">📍 ${item.location}</div>
+                    <div class="item-date">📅 ${new Date(item.date).toLocaleDateString()}</div>
+                    <p class="item-description">${item.description || 'No additional description provided.'}</p>
+                    <div class="item-contact"><strong>Contact:</strong> ${item.contact}</div>
+                `;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.addEventListener('click', () => {
+                    deleteItem(index);
+                });
+
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Edit';
+                editBtn.className = 'edit-btn';
+                editBtn.addEventListener('click', () => {
+                    localStorage.setItem('itemToEdit', JSON.stringify(item));
+                    window.location.href = 'edit-item.html';
+                });
+
+
+                card.appendChild(imageElement);
+                card.appendChild(details);
+                card.appendChild(deleteBtn);
+                card.appendChild(editBtn);
+                container.appendChild(card);
+            });
+        }
+
+        function deleteItem(index) {
+            const allItems = JSON.parse(localStorage.getItem('lostAndFoundItems')) || [];
+            fetch('/get-user')
+                .then(res => res.json())
+                .then(data => {
+                    const username = data.username;
+                    const myItems = allItems.filter(item => item.reportedBy === username);
+                    const itemToDelete = myItems[index];
+
+                    // using timestamps to identify the user 
+                    const newAllItems = allItems.filter(item => item.timestamp !== itemToDelete.timestamp);
+
+                    // save new list
+                    localStorage.setItem('lostAndFoundItems', JSON.stringify(newAllItems));
+                    displayItems(newAllItems.filter(item => item.reportedBy === username));
+                })
+                .catch(() => {
+                    alert('Error: could not get current user.');
+                });
+        }
+    });
+</script>
+
+</body>
+</html>
