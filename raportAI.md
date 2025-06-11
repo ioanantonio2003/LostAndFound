@@ -16,10 +16,10 @@
 - Generarea unor fotografii AI pentru site  
   *(Ex: Am întrebat ChatGPT să-mi sugereze poze potrivite pentru prima pagină a site-ului)*
 
-- Explicare de concepte ale fostei materii Tehnici Web(html,css,js)
+- Explicare de concepte ale fostei materii Tehnici Web(html,css,js)  
   *(EX: i am dat concepte si explicatii despre fosta materie ca sa mi le explice , privind ce am eu nevoie)*
 
-- Generare si corectare cod de care aveam mare nevoie dar nu intelegeam si nici nu stiam sa fac
+- Generare si corectare cod de care aveam mare nevoie dar nu intelegeam si nici nu stiam sa fac  
   *(EX: i am dat codul facut de mine si il rugam sa retuseze ce nu reuseam eu sa fac singur)*
 
 ---
