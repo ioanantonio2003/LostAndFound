@@ -16,6 +16,10 @@
 - Generarea unor fotografii AI pentru site  
   *(Ex: Am întrebat ChatGPT să-mi sugereze poze potrivite pentru prima pagină a site-ului)*
 
+  -Explicare de concepte ale fostei materii Tehnici Web(html,css,js).
+
+  -Greseli identificate pe care singur nu reuseam sa le gasesc.
+
 ---
 
 ## 2. DeepSeek
