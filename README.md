@@ -23,8 +23,5 @@ https://www.youtube.com/watch?v=u92jrkxNjQg
 
 ![image](https://github.com/user-attachments/assets/1632dbb9-cca1-42f7-acfd-fb3ac82f301b)
 
----
-
-![image](https://github.com/user-attachments/assets/b93dc9b6-9361-454c-b2ff-6e1f5104efa3)
 
 
