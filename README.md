@@ -127,7 +127,8 @@ Email includes the message and contact details.
 ---
 
 ## 🖱 Source Control
-
+-We have made 15 commits regarding the implementation of the project and another 15+ for its stages and documentation.
+-We have created separate branches for development, which have been added to Main
 ---
 
 ## 💬 Code Standards & Comments
