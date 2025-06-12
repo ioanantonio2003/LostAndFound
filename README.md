@@ -138,7 +138,11 @@ We have created separate branches for development, which have been added to Main
 
 The code was written in a clear and organized style, with suggestive names for methods and variables. We added comments to make the code easier to understand for other team members.
 
+---
+
 ## 💻 Prompt Engineering
+
+![image](https://github.com/user-attachments/assets/8970fe2d-6e2c-478f-a65c-59b146ae27dc)
 
 
 
