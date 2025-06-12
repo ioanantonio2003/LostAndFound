@@ -126,7 +126,7 @@ Email includes the message and contact details.
 
 ---
 
-## 🖱 Sourse Control
+## 🖱 Source Control
 
 ---
 
