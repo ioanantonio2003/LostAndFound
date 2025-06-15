@@ -1,10 +1,14 @@
+
 {
   "name": "lostandfound",
   "version": "1.0.0",
   "description": "---",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "start": "node server.js",
+    "cypress:open": "npx cypress open",
+    "cypress:run": "npx cypress run"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +18,8 @@
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "cypress": "^13.6.0"
   }
 }

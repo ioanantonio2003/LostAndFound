@@ -3,6 +3,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const session = require("express-session");
+const path = require('path');
 
 //initiate express app
 const app = express();
@@ -67,6 +68,19 @@ app.post("/login", (req, res) => {
   res.redirect("/main.html");
 });
 
+// Test cleanup endpoint
+app.post('/cypress/cleanup', (req, res) => {
+  try {
+    if (fs.existsSync(USERS_FILE)) {
+      fs.unlinkSync(USERS_FILE);
+    }
+    res.sendStatus(200);
+  } catch (error) {
+    console.error('Cleanup error:', error);
+    res.status(500).send('Cleanup failed');
+  }
+});
+
 //Main Page
 app.get("/main", (req, res) => {
     if (!req.session.user) {
@@ -104,3 +118,14 @@ app.get("/logout", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server ruleaza pe http://localhost:${PORT}`);
 });
+// Cypress test cleanup endpoint (sadece test ortamında kullanılmalı)
+if (process.env.NODE_ENV === 'test') {
+  app.post('/cypress/cleanup', (req, res) => {
+    if (fs.existsSync(USERS_FILE)) {
+      fs.unlinkSync(USERS_FILE);
+    }
+    res.sendStatus(200);
+  });
+}
+
+module.exports = app;
