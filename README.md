@@ -123,7 +123,8 @@ Email includes the message and contact details.
 
 ![image](https://github.com/user-attachments/assets/294e1797-99de-4e84-9edf-441ff349196e)
 
-![image](https://github.com/user-attachments/assets/b30f308c-3680-4846-86eb-805fd8e58386)
+![diagramm](https://github.com/user-attachments/assets/0a8a95d2-8912-40cd-bf16-974d4f6f7b0b)
+
 
 ---
 
